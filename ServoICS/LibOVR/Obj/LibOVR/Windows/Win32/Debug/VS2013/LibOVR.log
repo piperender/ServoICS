@@ -1,0 +1,24 @@
+﻿2016/01/14 15:47:47 にビルドを開始しました。
+     1>ノード 3 上のプロジェクト "C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\LibOVR.vcxproj" (Rebuild ターゲット)。
+     1>PreBuildEvent:
+         echo static const char* OVR_FORCE_REBUILD_PRE = __TIMESTAMP__; /* DO NOT SOURCE CONTROL THIS FILE */ > "C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\OVR_ForceRebuildNoCheckin.h"
+         :VCEnd
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../../Include /Z7 /nologo /W4 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR- /Fo"C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\../../../Obj/LibOVR/Windows/Win32/Debug/VS2013/" /Fd"C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\../../../Obj/LibOVR/Windows/Win32/Debug/VS2013/vc120.pdb" /Gd /TC /analyze- /Zl /errorReport:prompt /FC ..\..\..\Src\OVR_CAPIShim.c
+         OVR_CAPIShim.c
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../../../Include /Z7 /nologo /W4 /WX- /MP /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR- /Fo"C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\../../../Obj/LibOVR/Windows/Win32/Debug/VS2013/" /Fd"C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\../../../Obj/LibOVR/Windows/Win32/Debug/VS2013/vc120.pdb" /Gd /TP /analyze- /Zl /errorReport:prompt /FC ..\..\..\Src\OVR_CAPI_Util.cpp ..\..\..\Src\OVR_StereoProjection.cpp
+         OVR_CAPI_Util.cpp
+         OVR_StereoProjection.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\../../../Lib/Windows/Win32/Debug/VS2013/LibOVR.lib" /NOLOGO C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\../../../Obj/LibOVR/Windows/Win32/Debug/VS2013/OVR_CAPIShim.obj
+         C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\../../../Obj/LibOVR/Windows/Win32/Debug/VS2013/OVR_CAPI_Util.obj
+         C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\../../../Obj/LibOVR/Windows/Win32/Debug/VS2013/OVR_StereoProjection.obj
+         LibOVR.vcxproj -> C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\../../../Lib/Windows/Win32/Debug/VS2013/LibOVR.lib
+       PostBuildEvent:
+         echo static const char* OVR_FORCE_REBUILD_POST = __TIMESTAMP__; /* DO NOT SOURCE CONTROL THIS FILE */ > "C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\OVR_ForceRebuildNoCheckin.h"
+         :VCEnd
+     1>プロジェクト "C:\Users\robosheep\Documents\GitHub\ServoICS\ServoICS\LibOVR\Projects\Windows\VS2013\LibOVR.vcxproj" (Rebuild ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:02.67
