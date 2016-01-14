@@ -29,6 +29,83 @@ limitations under the License.
 // Include the Oculus SDK
 #include "OVR_CAPI_D3D.h"
 
+// Add: OVR_Math.h
+#include "Extras/OVR_Math.h"
+
+// Add: Serial Port Code with ICS
+#include "SignalPort.h"
+#include "SerialPortProcessor.h"
+
+// Add: Serial Port global variable
+SignalPort g_port;
+CSerialPortProcessor g_seriPort;
+
+//------------------------------------------------------------
+// Add: Function
+int	SetPos(int id, int pos);
+int ServoRoll(float radian);
+
+// Add: Fnction SetPos
+int SetPos(int id, int pos)
+{
+	unsigned char tx[3] = { 0, 0, 0 };
+	unsigned char rx[6] = { 0, 0, 0, 0, 0, 0 };
+	//array<Byte>^tx = { 0, 0, 0 };       // unsigned char tx[3]
+	//array<Byte>^rx = { 0, 0, 0, 0, 0, 0 }; // unsigned char rx[6](ループバックを含む)
+
+	int dat;
+	bool flag = true; // 正しくデータが受け取れたか
+
+	tx[0] = (BYTE)(0x80 | id);       // CMD
+	tx[1] = (BYTE)((pos >> 7) & 0x7F); // POS_H
+	tx[2] = (BYTE)(pos & 0x7f);      // POS_L
+
+	//serialPort1->DiscardInBuffer();   // バッファをクリアする
+	//serialPort1->DiscardOutBuffer();
+
+	//serialPort1->Write(tx, 0, 3); // tx配列(ICSコマンド)をシリアルポートから出力する
+	//g_port.Send(tx);
+	g_seriPort.SendData(tx, 3);
+
+	for (int i = 0; i < 6; i++) // １バイト受信を６回繰り返す 
+	{
+		try
+		{
+			//rx[i] = (BYTE)serialPort1->ReadByte(); // １バイト受信
+			//rx[i] = (BYTE)g_port.ReadByte();
+			//dw = g_seriPort.GetReceivedData(&rx[i]);
+		}
+		catch (...)
+		{
+			flag = false;
+			break;
+		}
+	}
+
+	if (flag == false)
+	{
+		return -1;
+	}
+
+	dat = (int)rx[4];
+	dat = (dat << 7) + (int)rx[5];
+
+	return dat;
+}
+
+// Add: Function ServoRoll
+int ServoRoll(float radian)
+{
+	float fRAD = radian + MATH_FLOAT_PI*0.5f;
+	int ServoRoll = 10167 - int(fRAD*1697.652517f);
+	if (ServoRoll < 4833)
+		ServoRoll = 4833;
+	//int ServoRoll = (fRAD*1697.652517f) + 4833;
+	//if (ServoRoll > 10167)
+	//	ServoRoll = 10167;
+
+	return ServoRoll;
+}
 
 //------------------------------------------------------------
 // ovrSwapTextureSet wrapper class that also maintains the render target views
@@ -175,6 +252,13 @@ static bool MainLoop(bool retryCreate)
 
     bool isVisible = true;
 
+	DCB portConfig;
+	portConfig.BaudRate = 115200;
+	portConfig.Parity = EVENPARITY;
+
+	g_seriPort.Start("\\\\.\\COM3", &portConfig);
+
+
 	// Main loop
 	while (DIRECTX.HandleMessages())
 	{
@@ -201,6 +285,21 @@ static bool MainLoop(bool retryCreate)
         double           sensorSampleTime = ovr_GetTimeInSeconds();
 		ovrTrackingState hmdState = ovr_GetTrackingState(HMD, frameTime, ovrTrue);
 		ovr_CalcEyePoses(hmdState.HeadPose.ThePose, HmdToEyeViewOffset, EyeRenderPose);
+
+		// --------------------------------------------------------------------------
+		// Add: Get Head Yaw Roll Pitch
+		float hmdPitch = 0.0f;
+		float hmdRoll = 0.0f;
+		float hmdYaw = 0.0f;
+
+		OVR::Posef HeadPose = hmdState.HeadPose.ThePose;
+		HeadPose.Rotation.GetEulerAngles<OVR::Axis_Y, OVR::Axis_X, OVR::Axis_Z>(&hmdYaw, &hmdPitch, &hmdRoll);
+
+		SetPos(2, ServoRoll(hmdYaw));
+		SetPos(3, ServoRoll(hmdPitch));
+
+		// --------------------------------------------------------------------------
+
 
 		// Render Scene to Eye Buffers
         if (isVisible)
@@ -275,6 +374,8 @@ Done:
     }
 	DIRECTX.ReleaseDevice();
 	ovr_Destroy(HMD);
+
+	g_seriPort.End();
 
     // Retry on ovrError_DisplayLost
     return retryCreate || OVR_SUCCESS(result) || (result == ovrError_DisplayLost);
